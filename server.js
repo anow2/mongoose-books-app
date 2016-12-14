@@ -51,7 +51,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // ];
 
 
-var newBookUUID = 18;
+// var newBookUUID = 18;
 
 
 
