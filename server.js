@@ -81,6 +81,30 @@ app.post('/api/books', function (req, res) {
   });
 });
 
+//add new character to book
+app.post('/api/books/:book_id/characters', function (req, res) {
+  // Get book id from url params (`req.params`)
+  var bookId = req.params.book_id;
+  db.Book.findById(bookId)
+    .populate('author')
+    .exec(function(err, foundBook) {
+      console.log(foundBook);
+      if (err) {
+        res.status(500).json({error: err.message});
+      } else if (foundBook === null) {
+        // Is this the same as checking if the foundBook is undefined?
+        res.status(404).json({error: "No Book found by this ID"});
+      } else {
+        // push character into characters array
+        foundBook.characters.push(req.body);
+        // save the book with the new character
+        foundBook.save();
+        res.status(201).json(foundBook);
+      }
+    }
+  );
+});
+
 // delete book
 app.delete('/api/books/:id', function (req, res) {
   // get book id from url params (`req.params`)
